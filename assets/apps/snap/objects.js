@@ -1278,6 +1278,13 @@ SpriteMorph.prototype.initBlocks = function () {
           spec: 'PWM Pin %pwmPin Level %n',
           defaults: ['gpio_pwm_5',1023]
         },
+        evebrainServo: {
+          only: Process,
+          type: 'command',
+          category: 'Evelab',
+          spec: 'Set Servo to %n degrees',
+          defaults: [90]
+        },
         evebrainStop: {
           only: Process,
           type: 'command',
@@ -2368,6 +2375,7 @@ SpriteMorph.prototype.blockTemplates = function (category) {
     }else if (cat === 'Evelab') {
         blocks.push(block('evebrainMotorDriver'));
         blocks.push(block('evebrainMotorDriverBoth'));
+        blocks.push(block('evebrainServo'));
         blocks.push('-');
         blocks.push(block('evebrainGpio'));
         blocks.push('-');
@@ -6705,6 +6713,7 @@ StageMorph.prototype.blockTemplates = function (category) {
     }else if (cat === 'Evelab') {
       blocks.push(block('evebrainMotorDriver'));
       blocks.push(block('evebrainMotorDriverBoth'));
+      blocks.push(block('evebrainServo'));
         blocks.push('-');
         blocks.push(block('evebrainGpio'));
         blocks.push('-');

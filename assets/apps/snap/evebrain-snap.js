@@ -157,6 +157,25 @@ Process.prototype.evebrainGpio_pwm = function (pin, value) {
 }
 
 
+Process.prototype.evebrainServo = function (angle) {
+    // interpolated
+    if (typeof this.context.proceed === 'undefined') {
+        var self = this;
+        this.context.proceed = false;
+        evebrain.servo(angle, function(state, msg){
+          if(state === 'complete' && self.context){
+            self.context.proceed = true;
+          }
+        });
+    }
+    if(this.context.proceed){
+        return null;
+    }
+    this.pushContext('doYield');
+    this.pushContext();
+}
+
+
 Process.prototype.evebrainPlayNote = function (pin, note, duration) {
     // interpolated
     if (typeof this.context.proceed === 'undefined') {

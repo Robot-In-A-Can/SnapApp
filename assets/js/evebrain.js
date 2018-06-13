@@ -226,6 +226,10 @@ EveBrain.prototype = {
     this.send({cmd: pin_select, arg:pin_value}, cb);
   },
 
+  servo: function(angle, cb){
+    this.send({cmd: 'servo', arg:angle}, cb);
+  },
+
   set_speaker_pin: function(pin,cb){
     this.send({cmd: 'set_speaker' , arg:pin}, cb);
   },
