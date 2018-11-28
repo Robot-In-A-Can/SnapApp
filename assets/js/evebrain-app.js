@@ -65,7 +65,7 @@ EveBrainApp.prototype.handler = function(state){
 }
 
 EveBrainApp.prototype.configure = function(e){
-  var ip = prompt("Enter the address for your EveBrain here:\n (e.g. 192.168.1.100)", this.hashConfig['m']);
+  var ip = prompt("Enter the address for your EveBrain here:\n (e.g. 192.168.4.1)", this.hashConfig['m']);
   if(ip){
     window.location = '#m=' + ip;
     this.connect();
@@ -97,5 +97,11 @@ EveBrainApp.prototype.setConnState = function(){
       cs.querySelector('a').addEventListener('click', function(e){ self.configure(e) });
       cs.className = 'connState error';
       break;
+    default:
+      cs.innerHTML = '&#10007; <a href="#">Configure EveBrain connection</a>';
+      cs.querySelector('a').addEventListener('click', function(e){ self.configure(e) });
+      cs.className = 'connState';
+      break;
+
   }
 }
