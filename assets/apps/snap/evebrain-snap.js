@@ -1,5 +1,5 @@
 SpriteMorph.prototype.categories.push('Evelab');
-SpriteMorph.prototype.blockColor.Evelab = new Color(0, 0, 0);
+SpriteMorph.prototype.blockColor.Evelab = new Color(20,20, 20);
 
 //Functions to handle events coming from evebrain
 StageMorph.prototype.setupEveBrainEvents = function () {
@@ -75,13 +75,34 @@ Process.prototype.evebrainStop = function () {
     this.pushContext();
 }
 
-Process.prototype.evebrainGpio_read = function (pin) {
+Process.prototype.evebrainGpio_read = function () {
     // interpolated
     if (typeof this.context.proceed === 'undefined') {
         var self = this;
         this.context.proceed = false;
         this.context.result = null;
-        evebrain.analogInput(pin, function(state){
+        evebrain.analogInput(0, function(state){
+          if (self != null && self.context != null) {
+            self.context.result = state;
+            self.context.proceed = true;
+          }
+        });
+    }
+    if(this.context.proceed){
+        return this.context.result;
+    }
+    //return evebrain.analogSensor.level;
+    this.pushContext('doYield');
+    this.pushContext();
+}
+
+Process.prototype.evebrainGpio_readAnalog = function (pin) {
+    // interpolated
+    if (typeof this.context.proceed === 'undefined') {
+        var self = this;
+        this.context.proceed = false;
+        this.context.result = null;
+        evebrain.analogInputPCF(pin, function(state){
           if (self != null && self.context != null) {
             self.context.result = state;
             self.context.proceed = true;
@@ -176,17 +197,12 @@ Process.prototype.evebrainServo = function (angle) {
 }
 
 
-Process.prototype.evebrainPlayNote = function (pin, note, duration) {
+Process.prototype.evebrainPlayNote = function (note, duration) {
     // interpolated
     if (typeof this.context.proceed === 'undefined') {
         var self = this;
         this.context.proceed = false;
-        evebrain.set_speaker_pin(pin, function(state, msg){
-          if(state === 'complete' && self.context){
-            self.context.proceed = true;
-          }
-        });
-        evebrain.play_note(note, duration, function(state, msg){
+        evebrain.beep(note, duration, function(state, msg){
           if(state === 'complete' && self.context){
             self.context.proceed = true;
           }

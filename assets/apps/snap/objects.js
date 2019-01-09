@@ -1229,8 +1229,8 @@ SpriteMorph.prototype.initBlocks = function () {
           only: Process,
           type: 'command',
           category: 'Evelab',
-          spec: 'Play note %note on pin %pin for duration %s seconds',
-          defaults: ['C#', 4, 1]
+          spec: 'Buzzer note %s for duration %s seconds (5)',
+          defaults: [1, 1]
         },
         evebrainGpio: {
           only: Process,
@@ -1243,46 +1243,52 @@ SpriteMorph.prototype.initBlocks = function () {
           only: Process,
           type: 'reporter',
           category: 'Evelab',
-          spec: 'Analog %analogPin Read',
-          defaults: [0]
+          spec: 'GPIO Analog 0 Read',
+        },
+        evebrainGpio_readAnalog: {
+          only: Process,
+          type: 'reporter',
+          category: 'Evelab',
+          spec: 'External Analog %analogPin Read (SDA0 SCL2)',
+          defaults: [1]
         },
         evebrainTemperature: {
           only: Process,
           type: 'reporter',
           category: 'Evelab',
-          spec: 'Temperature Read',
+          spec: 'Temperature Read (16)',
         },
         evebrainHumidity: {
           only: Process,
           type: 'reporter',
           category: 'Evelab',
-          spec: 'Humidity Read',
+          spec: 'Humidity Read (16)',
         },
         evebrainDigital_read: {
           only: Process,
           type: 'reporter',
           category: 'Evelab',
           spec: 'Digital %pin Read',
-          defaults: [0]
+          defaults: [4]
         },
         evebrainDistance_read: {
           only: Process,
           type: 'reporter',
           category: 'Evelab',
-          spec: 'Distance Sensor',
+          spec: 'Distance Sensor (Trig5 Echo4)',
         },
         evebrainGpio_pwm: {
           only: Process,
           type: 'command',
           category: 'Evelab',
           spec: 'PWM Pin %pwmPin Level %n',
-          defaults: ['gpio_pwm_5',1023]
+          defaults: ['gpio_pwm_5',255]
         },
         evebrainServo: {
           only: Process,
           type: 'command',
           category: 'Evelab',
-          spec: 'Set Servo to %n degrees',
+          spec: 'Set Servo to %n degrees (10)',
           defaults: [90]
         },
         evebrainStop: {
@@ -1321,55 +1327,12 @@ SpriteMorph.prototype.initBlocks = function () {
           spec: 'Turn %clockwise by %n degrees',
           defaults: [90]
         },
-        mirobotPenup: {
-          only: Process,
-          type: 'command',
-          category: 'mirobot',
-          spec: 'Pen up'
-        },
-        mirobotPendown: {
-          only: Process,
-          type: 'command',
-          category: 'mirobot',
-          spec: 'Pen down'
-        },
-        mirobotBeep: {
-          only: Process,
-          type: 'command',
-          category: 'mirobot',
-          spec: 'Beep for %n seconds',
-          defaults: [0.5]
-        },
         mirobotStop: {
           only: Process,
           type: 'command',
           category: 'mirobot',
           spec: 'Stop'
         },
-        mirobotBumpSensor: {
-          only: Process,
-          type: 'reporter',
-          category: 'mirobot',
-          spec: 'Bump sensor'
-        },
-        mirobotLineSensor: {
-          only: Process,
-          type: 'reporter',
-          category: 'mirobot',
-          spec: 'Line sensor'
-        },
-        mirobotBumpEvent: {
-          only: Process,
-          type: 'hat',
-          category: 'mirobot',
-          spec: 'When I bump into something'
-        },
-        mirobotLineEvent: {
-          only: Process,
-          type: 'hat',
-          category: 'mirobot',
-          spec: 'When the line sensor changes'
-        }
     };
 };
 
@@ -2373,22 +2336,26 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         button.showHelp = BlockMorph.prototype.showHelp;
         blocks.push(button);
     }else if (cat === 'Evelab') {
-        blocks.push(block('evebrainMotorDriver'));
-        blocks.push(block('evebrainMotorDriverBoth'));
-        blocks.push(block('evebrainServo'));
-        blocks.push('-');
         blocks.push(block('evebrainGpio'));
-        blocks.push('-');
-        blocks.push(block('evebrainGpio_read'));
         blocks.push(block('evebrainDigital_read'));
         blocks.push('-');
-        blocks.push(block('evebrainDistance_read'));
-        blocks.push(block('evebrainTemperature'));
-        blocks.push(block('evebrainHumidity'));
+        blocks.push('-');
+        blocks.push(block('evebrainMotorDriver'));
+        blocks.push(block('evebrainMotorDriverBoth'));
+        blocks.push('-');
         blocks.push('-');
         blocks.push(block('evebrainGpio_pwm'));
-        blocks.push(block('evebrainPlayNote'));
+        blocks.push(block('evebrainGpio_read'));
         blocks.push('-');
+        blocks.push('-');
+        blocks.push('-');
+        blocks.push('-');
+        blocks.push(block('evebrainDistance_read'));
+        blocks.push(block('evebrainPlayNote'));
+        blocks.push(block('evebrainServo'));
+        blocks.push(block('evebrainTemperature'));
+        blocks.push(block('evebrainHumidity'));
+        blocks.push(block('evebrainGpio_readAnalog'));
     }else if (cat === 'mirobot') {
 
         blocks.push(block('mirobotForward'));
@@ -2396,18 +2363,6 @@ SpriteMorph.prototype.blockTemplates = function (category) {
         blocks.push(block('mirobotLeft'));
         blocks.push(block('mirobotRight'));
         blocks.push(block('mirobotStop'));
-        blocks.push('-');
-        blocks.push(block('mirobotPenup'));
-        blocks.push(block('mirobotPendown'));
-        blocks.push('-');
-        blocks.push(block('mirobotBeep'));
-        blocks.push('-');
-        blocks.push(block('mirobotBumpSensor'));
-        blocks.push('-');
-        blocks.push(block('mirobotLineSensor'));
-        blocks.push('-');
-        blocks.push(block('mirobotBumpEvent'));
-        blocks.push(block('mirobotLineEvent'));
 
     }
     return blocks;
@@ -4545,12 +4500,6 @@ SpriteMorph.prototype.allHatBlocksFor = function (message) {
             if (morph.selector === 'receiveOnClone') {
                 return message === '__clone__init__';
             }
-            if (morph.selector === 'mirobotBumpEvent') {
-                return message === '__evebrain_bump__';
-            }
-            if (morph.selector === 'mirobotLineEvent') {
-                return message === '__evebrain_line__';
-            }
         }
         return false;
     });
@@ -6206,7 +6155,6 @@ StageMorph.prototype.fireGreenFlagEvent = function () {
     if (ide) {
         ide.controlBar.pauseButton.refresh();
     }
-    this.setupMirobotEvents();
     this.setupEveBrainEvents();
     return procs;
 };
@@ -6229,7 +6177,6 @@ StageMorph.prototype.fireStopAllEvent = function () {
             function () {ide.controlBar.pauseButton.refresh(); }
         ]);
     }
-    this.stopMirobotEvents();
     this.stopEveBrainEvents();
 };
 
@@ -6711,41 +6658,32 @@ StageMorph.prototype.blockTemplates = function (category) {
         );
         blocks.push(button);
     }else if (cat === 'Evelab') {
-      blocks.push(block('evebrainMotorDriver'));
-      blocks.push(block('evebrainMotorDriverBoth'));
-      blocks.push(block('evebrainServo'));
-        blocks.push('-');
         blocks.push(block('evebrainGpio'));
-        blocks.push('-');
-        blocks.push(block('evebrainGpio_read'));
         blocks.push(block('evebrainDigital_read'));
         blocks.push('-');
-        blocks.push(block('evebrainDistance_read'));
-        blocks.push(block('evebrainTemperature'));
-        blocks.push(block('evebrainHumidity'));
+        blocks.push('-');
+        blocks.push(block('evebrainMotorDriver'));
+        blocks.push(block('evebrainMotorDriverBoth'));
+        blocks.push('-');
         blocks.push('-');
         blocks.push(block('evebrainGpio_pwm'));
-        blocks.push(block('evebrainPlayNote'));
+        blocks.push(block('evebrainGpio_read'));
         blocks.push('-');
+        blocks.push('-');
+        blocks.push('-');
+        blocks.push('-');
+        blocks.push(block('evebrainDistance_read'));
+        blocks.push(block('evebrainPlayNote'));
+        blocks.push(block('evebrainServo'));
+        blocks.push(block('evebrainTemperature'));
+        blocks.push(block('evebrainHumidity'));
+        blocks.push(block('evebrainGpio_readAnalog'));
     } else if(cat === 'mirobot'){
-
         blocks.push(block('mirobotForward'));
         blocks.push(block('mirobotBack'));
         blocks.push(block('mirobotLeft'));
         blocks.push(block('mirobotRight'));
         blocks.push(block('mirobotStop'));
-        blocks.push('-');
-        blocks.push(block('mirobotPenup'));
-        blocks.push(block('mirobotPendown'));
-        blocks.push('-');
-        blocks.push(block('mirobotBeep'));
-        blocks.push('-');
-        blocks.push(block('mirobotBumpSensor'));
-        blocks.push('-');
-        blocks.push(block('mirobotLineSensor'));
-        blocks.push('-');
-        blocks.push(block('mirobotBumpEvent'));
-        blocks.push(block('mirobotLineEvent'));
     }
     return blocks;
 };

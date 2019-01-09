@@ -10,7 +10,7 @@ html, body{
   position:fixed;
   top:0;
   width:100%;
-  background:rgba(244,244,244,0.9);
+  background:#332222;
   padding:0;
   -webkit-box-shadow: 0 0 12px 0  rgba(0,0,0,0.4);
   -moz-box-shadow: 0 0 12px 0  rgba(0,0,0,0.4);
@@ -28,10 +28,10 @@ html, body{
   position:absolute;
   right:5px;
   bottom:5px;
-  color:#222;
+  color:#EEE;
 }
-.connState a{ color:#222}
-.connState.error{ color:#D12121}
+.connState a{ color:#EEE}
+.connState.error{ color:#FF2121}
 .connState.error a{ color:#D12121}
 .connState.connected{color:#33D121}
 .connState.connected a{color:#33D121}
@@ -102,7 +102,7 @@ border-top-right-radius: 10px;
   right:5px;
   top:5px;
   text-decoration:underline;
-  color:#222;
+  color:#EEE;
 }
 #save ul{
   display:none;

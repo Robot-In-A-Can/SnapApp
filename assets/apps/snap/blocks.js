@@ -1127,27 +1127,6 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 true
             );
             break;
-         case '%note':
-            part = new InputSlotMorph(
-                null,
-                false,
-                {
-                    'A' : 'A',
-                    'A#' : 'A#',
-                    'B' : 'B',
-                    'C' : 'C',
-                    'C#' : 'C#',
-                    'D' : 'D',
-                    'D#' : 'D#',
-                    'E' : 'E',
-                    'F' : 'F',
-                    'F#' : 'F#',
-                    'G' : 'G',
-                    'G#' : 'G#',
-                },
-                true
-            );
-            break;
         case '%onoff':
             part = new InputSlotMorph(
                 null,
@@ -1200,6 +1179,9 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 false,
                 {
                     '0' : [0],
+                    '1' : [1],
+                    '2' : [2],
+                    '3' : [3],
                 },
                 true
             );
@@ -1209,9 +1191,9 @@ SyntaxElementMorph.prototype.labelPart = function (spec) {
                 null,
                 false,
                 {
-                    'gpio_pwm_5' : ['gpio_pwm_5'],
-                    'gpio_pwm_10' : ['gpio_pwm_10'],
-                    'gpio_pwm_16' : ['gpio_pwm_16'],
+                    '5' : ['gpio_pwm_5'],
+                    '10' : ['gpio_pwm_10'],
+                    '16' : ['gpio_pwm_16'],
                 },
                 true
             );

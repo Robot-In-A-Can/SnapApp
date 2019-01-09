@@ -16,8 +16,6 @@ var EveBrain = function(url){
   this.cbs = {};
   this.listeners = [];
   this.sensorState = {follow: null, collide: null};
-  this.collideListening = false;
-  this.followListening = false;
   this.analogSensor = {level: null};
   this.digitalSensor = {level: null};
   this.distanceSensor = {level: null};
@@ -47,7 +45,7 @@ EveBrain.prototype = {
       this.connTimeout = window.setTimeout(function(){
         if(!self.connected){
           self.ws.close();
-        }
+        } 
       }, 1000);
     }
   },
@@ -143,24 +141,8 @@ EveBrain.prototype = {
     this.move('rightMotorB', distance, cb);
   },
 
-  penup: function(cb){
-    this.send({cmd: 'penup'}, cb);
-  },
-
-  pendown: function(cb){
-    this.send({cmd: 'pendown'}, cb);
-  },
-
-  beep: function(duration, cb){
-    this.send({cmd: 'beep', arg: duration}, cb);
-  },
-
-  collide: function(cb){
-    this.send({cmd: 'collide'}, cb);
-  },
-
-  follow: function(cb){
-    this.send({cmd: 'follow'}, cb);
+  arc: function(angle,radius,repeat,cb){
+    this.send({cmd: 'arc' , arg:[angle,radius,repeat]}, cb);
   },
 
 
@@ -171,9 +153,18 @@ EveBrain.prototype = {
   },
 
   analogInput: function(pin_number, cb){
-    console.log("Entered analogInput");
     var self = this;
     this.send({cmd: 'analogInput', arg:pin_number}, function(state, msg){
+      if(state === 'complete' && undefined != msg){
+        self.analogSensor.level = msg.msg;
+        cb(self.analogSensor.level);
+      }
+    });
+  },
+
+  analogInputPCF: function(pin_number, cb){
+    var self = this;
+    this.send({cmd: 'readSensors', arg:pin_number}, function(state, msg){
       if(state === 'complete' && undefined != msg){
         self.analogSensor.level = msg.msg;
         cb(self.analogSensor.level);
@@ -230,57 +221,8 @@ EveBrain.prototype = {
     this.send({cmd: 'servo', arg:angle}, cb);
   },
 
-  set_speaker_pin: function(pin,cb){
-    this.send({cmd: 'set_speaker' , arg:pin}, cb);
-  },
-  
-  play_note: function(note, duration, cb){
-    this.send({cmd:note, arg: duration}, cb);
-  },
-
-
-  collisionSensorState: function(cb){
-    if(this.sensorState.collide === null || !this.collideListening){
-      var self = this;
-      this.send({cmd: 'collideState'}, function(state, msg){
-        if(state === 'complete' && undefined != msg){
-          self.sensorState.collide = msg.msg;
-          cb(self.sensorState.collide);
-        }
-      });
-    }else{
-      cb(this.sensorState.collide);
-    }
-  },
-
-  followSensorState: function(cb){
-    if(this.sensorState.follow === null || !this.followListening){
-      var self = this;
-      this.send({cmd: 'followState'}, function(state, msg){
-        if(state === 'complete' && undefined != msg){
-          self.sensorState.follow = msg.msg;
-          cb(self.sensorState.follow);
-        }
-      });
-    }else{
-      cb(this.sensorState.follow);
-    }
-  },
-
-  collideSensorNotify: function(state, cb){
-    var self = this;
-    this.send({cmd: 'collideNotify', arg: (state ? 'true' : 'false')}, function(){
-      self.collideListening = true;
-      cb();
-    });
-  },
-
-  followSensorNotify: function(state, cb){
-    var self = this;
-    this.send({cmd: 'followNotify', arg: (state ? 'true' : 'false')}, function(){
-      self.followListening = true;
-      cb();
-    });
+  beep: function(note,duration,cb){
+    this.send({cmd: 'beep' , arg:[note,duration*1000]}, cb);
   },
 
   stop: function(cb){
