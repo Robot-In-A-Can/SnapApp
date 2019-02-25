@@ -1243,7 +1243,7 @@ SpriteMorph.prototype.initBlocks = function () {
           only: Process,
           type: 'reporter',
           category: 'Evelab',
-          spec: 'GPIO Analog 0 Read',
+          spec: 'Analog 0 Read',
         },
         evebrainGpio_readAnalog: {
           only: Process,
