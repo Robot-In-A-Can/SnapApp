@@ -274,7 +274,7 @@ EveBrain.prototype = {
   send_msg: function(msg){
     var self = this;
     msg = filterUnicode(msg);
-    console.log(msg);
+    //console.log(msg);
     this.ws.send(JSON.stringify(msg));
     this.timeoutTimer = window.setTimeout(function(){ self.handleError("Timeout") }, 3000);
   },
@@ -292,7 +292,7 @@ EveBrain.prototype = {
       msg.msg = filterUnicode(msg.msg);
       msg.id = filterUnicode(msg.id);
       msg.status = filterUnicode(msg.status);
-      console.log(msg);
+      //console.log(msg);
       clearTimeout(this.timeoutTimer);
       if(msg.status === 'notify'){
         this.broadcast(msg.id);
