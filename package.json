@@ -4,6 +4,7 @@
   "description": "Snap blocks programming tool for the Evebrain",
   "main": "src/init.js",
   "scripts": {
+    "install": "cd src & npm install",
     "start": "electron src/init.js",
     "build:local": "electron-packager ./src --out=./builds --overwrite",
     "build:win": "electron-packager ./src --out=./builds --platform=win32 --arch=x64 --overwrite",
@@ -29,10 +30,10 @@
   },
   "homepage": "https://www.robotinacan.com",
   "dependencies": {
-    "electron": "^5.0.1"
+    "electron": "^5.0.1",
+    "electron-squirrel-startup": "^1.0.0"
   },
   "devDependencies": {
-    "electron-installer-windows": "^1.1.1",
     "electron-packager": "^13.1.1",
     "electron-winstaller": "^3.0.4"
   }
