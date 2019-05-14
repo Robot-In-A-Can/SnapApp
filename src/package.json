@@ -1,0 +1,25 @@
+{
+  "name": "evebrain",
+  "version": "0.1.0",
+  "description": "Snap blocks programming tool for the Evebrain",
+  "main": "init.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Robot-In-A-Can/Evebrain-Snap-WebApp.git"
+  },
+  "keywords": [
+    "Robot-in-a-can",
+    "Snap",
+    "programming",
+    "blocks"
+  ],
+  "author": "Robot in a Can Inc.",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Robot-In-A-Can/Evebrain-Snap-WebApp/issues"
+  },
+  "homepage": "http://www.robotinacan.com",
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.0"
+  }
+}
