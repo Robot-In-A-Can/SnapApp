@@ -10,6 +10,8 @@
 
 - .msi simply copies .exe to `Program Files (x86)\evebrain Installer`. It is still necessary to execute the .exe which follows the steps described above (fix redundancy?)
 
+- Issue: Window does not close after clicking on closing button. Workaround: terminate `evebrain` process using Task manager
+
 
 ### Setup for development
 
