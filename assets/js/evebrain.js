@@ -117,11 +117,11 @@ EveBrain.prototype = {
   },
 
   left: function(distance, cb){
-    this.move('left', distance, cb);
+    this.move('right', distance, cb);
   },
 
   right: function(distance, cb){
-    this.move('right', distance, cb);
+    this.move('left', distance, cb);
   },
 
   leftMotorForward: function(distance, cb){
